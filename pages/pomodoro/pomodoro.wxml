@@ -7,6 +7,8 @@
         <view class="clock-container container2">
             <view class="clock"></view>
         </view>
+        <view class="marker start"></view>
+        <view class="marker end"></view>
     </view>
     <view class="time"></view>
     <view class="controller"></view>

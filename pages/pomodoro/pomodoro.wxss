@@ -14,41 +14,73 @@
   }
 }
 
+@keyframes rotate-marker {
+  100% {
+    transform: rotateZ(360deg);
+  }
+}
+
 .clock-main {
-    position: absolute;
-    width: 500rpx;
-    height: 500rpx;
-    left: 125rpx;
+  position: absolute;
+  width: 500rpx;
+  height: 500rpx;
+  left: 125rpx;
+}
+
+.clock-main::after {
+  content: "";
+  background: #fff;
+  border-radius: 50%;
+  width: 375rpx;
+  height: 375rpx;
+  position: absolute;
+  left: 62.5rpx;
+  top: 62.5rpx;
 }
 
 .clock-container {
-    position: absolute;
-    width: 250rpx;
-    overflow: hidden;
+  position: absolute;
+  width: 250rpx;
+  overflow: hidden;
 }
 
 .clock {
-    background: #00896C;
-    width: 250rpx;
-    height: 500rpx;
+  background: #00896C;
+  width: 250rpx;
+  height: 500rpx;
 }
 
 .container1 {
-    left: 250rpx;
+  left: 250rpx;
 }
 
 .container1 .clock {
-  animation: rotate-bg-1 4s infinite linear;
+  animation: rotate-bg-1 750s infinite steps(750);
   border-radius: 0 500rpx 500rpx 0;
   transform-origin: 0 50%;
 }
 
 .container2 {
-    right: 250rpx;
+  right: 250rpx;
 }
 
 .container2 .clock {
-  animation: rotate-bg-2 4s infinite linear;
+  animation: rotate-bg-2 750s infinite steps(750);
   border-radius: 500rpx 0 0 500rpx;
   transform-origin: 250rpx 250rpx;
+}
+
+.marker {
+  background: red;
+  border-radius: 50%;
+  height: 62.5rpx;
+  width: 62.5rpx;
+  position: absolute;
+  top: 0;
+  left: 218.75rpx;
+}
+
+.end {
+  animation: rotate-marker 750s infinite steps(750);
+  transform-origin: 50% 250rpx;
 }
