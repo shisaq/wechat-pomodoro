@@ -1,2 +1,13 @@
 <!--pages/pomodoro/pomodoro.wxml-->
-<view class="container"></view>
+<view class="container">
+    <view class="clock-main">
+        <view class="clock-container container1">
+            <view class="clock"></view>
+        </view>
+        <view class="clock-container container2">
+            <view class="clock"></view>
+        </view>
+    </view>
+    <view class="time"></view>
+    <view class="controller"></view>
+</view>

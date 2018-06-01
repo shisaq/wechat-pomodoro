@@ -1,1 +1,54 @@
 /* pages/pomodoro/pomodoro.wxss */
+@keyframes rotate-bg-1 {
+  50%, 100% {
+    transform: rotateZ(180deg);
+  }
+}
+
+@keyframes rotate-bg-2 {
+  0%, 50% {
+    transform: rotateZ(0);
+  }
+  100% {
+    transform: rotateZ(180deg);
+  }
+}
+
+.clock-main {
+    position: absolute;
+    width: 500rpx;
+    height: 500rpx;
+    left: 125rpx;
+}
+
+.clock-container {
+    position: absolute;
+    width: 250rpx;
+    overflow: hidden;
+}
+
+.clock {
+    background: #00896C;
+    width: 250rpx;
+    height: 500rpx;
+}
+
+.container1 {
+    left: 250rpx;
+}
+
+.container1 .clock {
+  animation: rotate-bg-1 4s infinite linear;
+  border-radius: 0 500rpx 500rpx 0;
+  transform-origin: 0 50%;
+}
+
+.container2 {
+    right: 250rpx;
+}
+
+.container2 .clock {
+  animation: rotate-bg-2 4s infinite linear;
+  border-radius: 500rpx 0 0 500rpx;
+  transform-origin: 250rpx 250rpx;
+}
