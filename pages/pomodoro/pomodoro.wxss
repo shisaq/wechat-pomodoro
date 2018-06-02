@@ -54,8 +54,7 @@
   left: 250rpx;
 }
 
-.container1 .clock {
-  animation: rotate-bg-1 750s infinite steps(750);
+.clock-right {
   border-radius: 0 500rpx 500rpx 0;
   transform-origin: 0 50%;
 }
@@ -64,8 +63,7 @@
   right: 250rpx;
 }
 
-.container2 .clock {
-  animation: rotate-bg-2 750s infinite steps(750);
+.clock-left {
   border-radius: 500rpx 0 0 500rpx;
   transform-origin: 250rpx 250rpx;
 }
@@ -81,6 +79,22 @@
 }
 
 .end {
-  animation: rotate-marker 750s infinite steps(750);
-  transform-origin: 50% 250rpx;
+  transform-origin: 31.25rpx 250rpx;
+}
+
+.timer {
+  position: absolute;
+  top: 50%;
+  transform: translateY(-50%);
+  z-index: 1;
+  width: 500rpx;
+  text-align: center;
+  font-size: 40px;
+  font-weight: bold;
+  font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+}
+
+.controller {
+  position: absolute;
+  bottom: 300rpx;
 }
