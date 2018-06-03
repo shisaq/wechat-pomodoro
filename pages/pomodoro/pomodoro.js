@@ -8,11 +8,14 @@ Page({
   data: {
     actionName: "开始",
     currentColor: "primary",
+    rotateBgRight: "rotate-bg-1",
+    rotateBgLeft: "rotate-bg-2",
+    rotateMarker: "rotate-marker",
     clockRightStyle: "none",
     clockLeftStyle: "none",
     spotStyle: "none",
-    workDuration: 5,
-    breakDuration: 2,
+    workDuration: 20,
+    breakDuration: 5,
     timeLeft: null,
     workStatus: true,
     timer: ""
@@ -25,7 +28,9 @@ Page({
     const { workDuration } = this.data;
     this.setData({
       timer: this.timeFormat(workDuration),
-      timeLeft: workDuration
+      timeLeft: workDuration,
+      loop: "infinite",
+      runningStyle: `linear`
     });
   },
 
@@ -67,15 +72,20 @@ Page({
   /**
    * 开始计时
    */
-  startClock: function () {
-    const { workDuration } = this.data;
+  startClock: function() {
+    const { workDuration,
+            rotateBgLeft,
+            rotateBgRight,
+            rotateMarker,
+            loop,
+            runningStyle } = this.data;
     const timer = this.timeFormat(workDuration);
     this.setData({
       actionName: "停止",
       currentColor: "warn",
-      clockRightStyle: `rotate-bg-1 ${workDuration}s infinite steps(${workDuration})`,
-      clockLeftStyle: `rotate-bg-2 ${workDuration}s infinite steps(${workDuration})`,
-      spotStyle: `rotate-marker ${workDuration}s infinite steps(${workDuration})`,
+      clockRightStyle: `${rotateBgRight} ${workDuration}s ${loop} ${runningStyle}`,
+      clockLeftStyle: `${rotateBgLeft} ${workDuration}s ${loop} ${runningStyle}`,
+      spotStyle: `${rotateMarker} ${workDuration}s ${loop} ${runningStyle}`,
       workDuration: workDuration,
       timer: timer
     });
@@ -83,12 +93,12 @@ Page({
   },
 
   /**
-  * 停止计时
-  */
-  stopClock: function () {
+   * 停止计时
+   */
+  stopClock: function() {
     const { workDuration } = this.data;
     const timer = this.timeFormat(workDuration);
-    console.log(workDuration)
+    console.log(workDuration);
 
     clearInterval(app.globalData.timeInterval);
     this.setData({
@@ -105,12 +115,19 @@ Page({
   /**
    * 工作/休息状态切换
    */
-  refreshClock: function () {
+  refreshClock: function() {
     // 清除原有倒计时
     clearInterval(app.globalData.timeInterval);
     app.globalData.timeInterval = null;
 
-    const { workDuration, breakDuration, workStatus } = this.data;
+    const { workDuration,
+            breakDuration,
+            workStatus,
+            rotateBgLeft,
+            rotateBgRight,
+            rotateMarker,
+            loop,
+            runningStyle } = this.data;
     const duration = workStatus ? breakDuration : workDuration;
     const timer = this.timeFormat(duration);
 
@@ -119,21 +136,21 @@ Page({
       clockRightStyle: "none",
       clockLeftStyle: "none",
       spotStyle: "none"
-    })
+    });
     // 给css足够的时间重置(15ms)，低于15ms，就有重置失败的可能
     // 参考：http://jsfiddle.net/chad/Ytvys/
     setTimeout(() => {
       this.setData({
-        clockRightStyle: `rotate-bg-1 ${duration}s infinite steps(${duration})`,
-        clockLeftStyle: `rotate-bg-2 ${duration}s infinite steps(${duration})`,
-        spotStyle: `rotate-marker ${duration}s infinite steps(${duration})`,
+        clockRightStyle: `${rotateBgRight} ${duration}s ${loop} ${runningStyle}`,
+        clockLeftStyle: `${rotateBgLeft} ${duration}s ${loop} ${runningStyle}`,
+        spotStyle: `${rotateMarker} ${duration}s ${loop} ${runningStyle}`,
         timeLeft: duration,
         timer: timer,
         workStatus: !workStatus
       });
     }, 15);
     // 重启倒计时
-    this.countdown()
+    this.countdown();
   },
 
   /**
@@ -157,17 +174,17 @@ Page({
   timeFormat: function(second) {
     const min = Math.floor(second / 60); // 分钟位
     const sec = second - min * 60; // 秒位
-    return `${("0" + min).slice(-2)}:${("0"+sec).slice(-2)}`
+    return `${("0" + min).slice(-2)}:${("0" + sec).slice(-2)}`;
   },
 
   /**
    * 时间计算
    */
-  countdown: function () {
+  countdown: function() {
     app.globalData.timeInterval = setInterval(() => {
-      const timeLeft = this.data.timeLeft - 1
+      const timeLeft = this.data.timeLeft - 1;
       if (timeLeft <= 0) {
-        this.refreshClock()
+        this.refreshClock();
       } else {
         this.setData({
           timeLeft: timeLeft,
