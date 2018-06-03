@@ -108,7 +108,8 @@ Page({
       clockLeftStyle: "none",
       spotStyle: "none",
       timeLeft: workDuration,
-      timer: timer
+      timer: timer,
+      workStatus: true
     });
   },
 
