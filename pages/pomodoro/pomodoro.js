@@ -29,7 +29,7 @@ Page({
     this.setData({
       timer: this.timeFormat(workDuration),
       timeLeft: workDuration,
-      loop: "infinite",
+      loop: "1",
       runningStyle: `linear`
     });
   },
