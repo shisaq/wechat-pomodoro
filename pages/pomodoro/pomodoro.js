@@ -14,8 +14,8 @@ Page({
     clockRightStyle: "none",
     clockLeftStyle: "none",
     spotStyle: "none",
-    workDuration: 20,
-    breakDuration: 5,
+    workDuration: 1500,
+    breakDuration: 300,
     timeLeft: null,
     workStatus: true,
     timer: ""
