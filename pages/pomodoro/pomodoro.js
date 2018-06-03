@@ -11,8 +11,10 @@ Page({
     clockRightStyle: "none",
     clockLeftStyle: "none",
     spotStyle: "none",
-    duration: 1500,
+    workDuration: 5,
+    breakDuration: 2,
     timeLeft: null,
+    workStatus: true,
     timer: ""
   },
 
@@ -20,9 +22,11 @@ Page({
    * 生命周期函数--监听页面加载
    */
   onLoad: function(options) {
+    const { workDuration } = this.data;
     this.setData({
-      timer: this.timeFormat(this.data.duration)
-    })
+      timer: this.timeFormat(workDuration),
+      timeLeft: workDuration
+    });
   },
 
   /**
@@ -64,13 +68,16 @@ Page({
    * 开始计时
    */
   startClock: function () {
-    const { duration } = this.data;
+    const { workDuration } = this.data;
+    const timer = this.timeFormat(workDuration);
     this.setData({
       actionName: "停止",
       currentColor: "warn",
-      clockRightStyle: `rotate-bg-1 ${duration}s infinite steps(${duration})`,
-      clockLeftStyle: `rotate-bg-2 ${duration}s infinite steps(${duration})`,
-      spotStyle: `rotate-marker ${duration}s infinite steps(${duration})`
+      clockRightStyle: `rotate-bg-1 ${workDuration}s infinite steps(${workDuration})`,
+      clockLeftStyle: `rotate-bg-2 ${workDuration}s infinite steps(${workDuration})`,
+      spotStyle: `rotate-marker ${workDuration}s infinite steps(${workDuration})`,
+      workDuration: workDuration,
+      timer: timer
     });
     this.countdown();
   },
@@ -79,9 +86,9 @@ Page({
   * 停止计时
   */
   stopClock: function () {
-    const { duration } = this.data;
-    const timer = this.timeFormat(duration);
-    console.log(duration)
+    const { workDuration } = this.data;
+    const timer = this.timeFormat(workDuration);
+    console.log(workDuration)
 
     clearInterval(app.globalData.timeInterval);
     this.setData({
@@ -90,9 +97,43 @@ Page({
       clockRightStyle: "none",
       clockLeftStyle: "none",
       spotStyle: "none",
-      timeLeft: duration,
+      timeLeft: workDuration,
       timer: timer
     });
+  },
+
+  /**
+   * 工作/休息状态切换
+   */
+  refreshClock: function () {
+    // 清除原有倒计时
+    clearInterval(app.globalData.timeInterval);
+    app.globalData.timeInterval = null;
+
+    const { workDuration, breakDuration, workStatus } = this.data;
+    const duration = workStatus ? breakDuration : workDuration;
+    const timer = this.timeFormat(duration);
+
+    // 重置css3的animation
+    this.setData({
+      clockRightStyle: "none",
+      clockLeftStyle: "none",
+      spotStyle: "none"
+    })
+    // 给css足够的时间重置(15ms)，低于15ms，就有重置失败的可能
+    // 参考：http://jsfiddle.net/chad/Ytvys/
+    setTimeout(() => {
+      this.setData({
+        clockRightStyle: `rotate-bg-1 ${duration}s infinite steps(${duration})`,
+        clockLeftStyle: `rotate-bg-2 ${duration}s infinite steps(${duration})`,
+        spotStyle: `rotate-marker ${duration}s infinite steps(${duration})`,
+        timeLeft: duration,
+        timer: timer,
+        workStatus: !workStatus
+      });
+    }, 15);
+    // 重启倒计时
+    this.countdown()
   },
 
   /**
@@ -123,10 +164,10 @@ Page({
    * 时间计算
    */
   countdown: function () {
-      app.globalData.timeInterval = setInterval(() => {
-      const timeLeft = (this.data.timeLeft || this.data.duration) - 1
+    app.globalData.timeInterval = setInterval(() => {
+      const timeLeft = this.data.timeLeft - 1
       if (timeLeft <= 0) {
-        this.stopClock()
+        this.refreshClock()
       } else {
         this.setData({
           timeLeft: timeLeft,
